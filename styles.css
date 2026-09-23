@@ -367,51 +367,96 @@ html.intro-revealing .intro { opacity: 0; }
   letter-spacing: -0.045em;
 }
 
-@media (max-width: 700px) {
-  .hero { --artboard-width: 112vh; }
+@media (max-width: 767px) {
+  .intro {
+    height: 100svh;
+    min-height: 100dvh;
+  }
+  .intro__video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+
+  .hero { --artboard-width: min(130vw, 85svh); }
   .hero-header {
     align-items: flex-start;
     flex-direction: column;
-    gap: 0.7rem;
-    padding: 20px;
-    font-size: 0.56rem;
+    gap: 0.6rem;
+    padding: 18px 20px;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
   }
-  .hero-header__nav { gap: 0.55rem; }
+  .hero-header__nav { gap: 0.42rem; }
   .hero__background { object-position: 47% center; }
   .hero__meta { font-size: clamp(0.85rem, 5.2vw, 1.35rem); }
-  .hero-label--branding { left: 7vw; top: 10%; }
-  .hero-label--graphic { left: 7vw; bottom: 10.2%; }
-  .hero-label--illustration { right: 7vw; bottom: 15%; }
+  .hero-label--branding { left: 7vw; top: 15%; }
+  .hero-label--graphic { left: 7vw; bottom: 13%; }
+  .hero-label--illustration { right: 7vw; bottom: 19%; }
   .hero-year { right: 7vw; bottom: 8.2%; }
 
   .about {
-    height: 1100px;
+    height: 1180px;
     min-height: 100svh;
+    z-index: 0;
+    contain: paint;
   }
   .about__background { object-position: center; }
   .about__artboard {
-    inset: 0;
-    width: 100%;
-    height: 1100px;
+    inset: auto;
+    top: 0;
+    left: 50%;
+    width: min(100%, 430px);
+    height: 1180px;
     aspect-ratio: auto;
-    transform: translateY(16px);
+    transform: translate(-50%, 16px);
   }
-  .about.is-visible .about__artboard { transform: none; }
+  .about.is-visible .about__artboard { transform: translateX(-50%); }
   .about__layer { width: auto; height: auto; object-fit: initial; }
-  .about__photo { width: 256vw; left: -30px; top: 25px; }
-  .about__name { width: 308vw; left: -270px; top: 233px; }
-  .about__education { width: 256vw; left: -572px; top: 372px; }
-  .about__description { width: 205vw; left: -36px; top: 303px; }
-  .about__contact { width: 267vw; left: -60px; top: 327px; }
-  .about__apps { width: 231vw; left: -457px; top: 640px; }
-  .about__logo { width: 205vw; left: -279px; top: 632px; }
-  .about__photo-hitbox { left: 20px; top: 65px; width: 200px; height: 225px; }
-  .branding-chapter { --branding-artboard-width: 112vh; }
+  .about__photo { width: 1040px; left: -34px; top: -18px; }
+  .about__name { width: 1040px; left: -292px; top: 260px; }
+  .about__education { width: 800px; left: -564px; top: 400px; }
+  .about__description { width: 720px; left: -41px; top: 300px; }
+  .about__apps { width: 1000px; left: -635px; top: 430px; }
+  .about__contact { width: 1000px; left: -70px; top: 470px; }
+  .about__logo { width: 700px; right: 3px; left: auto; top: 686px; }
+  .about__photo-hitbox { left: 18px; top: 24px; width: 220px; height: 245px; }
+  .branding-chapter { --branding-artboard-width: min(130vw, 85svh); }
   .branding-chapter__background { object-position: 47% center; }
   .branding-chapter__meta { font-size: clamp(0.85rem, 5.2vw, 1.35rem); }
-  .branding-chapter__label--top { left: 7vw; top: 10%; }
-  .branding-chapter__label--bottom { left: 7vw; bottom: 10.2%; }
+  .branding-chapter__label--top { left: 7vw; top: 15%; }
+  .branding-chapter__label--bottom { left: 7vw; bottom: 13%; }
   .branding-chapter__year { right: 7vw; bottom: 8.2%; }
+}
+
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  .hero { --artboard-width: min(112vw, 85svh); }
+  .branding-chapter { --branding-artboard-width: min(112vw, 85svh); }
+
+  .about {
+    height: 1160px;
+    min-height: 100svh;
+  }
+  .about__artboard {
+    inset: auto;
+    top: 0;
+    left: 50%;
+    width: 430px;
+    height: 1160px;
+    aspect-ratio: auto;
+    transform: translate(-50%, 16px);
+  }
+  .about.is-visible .about__artboard { transform: translateX(-50%); }
+  .about__layer { width: auto; height: auto; object-fit: initial; }
+  .about__photo { width: 1000px; left: -30px; top: 25px; }
+  .about__name { width: 1200px; left: -270px; top: 233px; }
+  .about__education { width: 1000px; left: -572px; top: 372px; }
+  .about__description { width: 800px; left: -36px; top: 303px; }
+  .about__contact { width: 1040px; left: -60px; top: 327px; }
+  .about__apps { width: 900px; left: -457px; top: 640px; }
+  .about__logo { width: 800px; left: -279px; top: 632px; }
+  .about__photo-hitbox { left: 20px; top: 65px; width: 200px; height: 225px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -435,7 +480,11 @@ html.intro-revealing .intro { opacity: 0; }
   .branding-chapter__title { transform: none; }
   .intro, .hero { transition-duration: 160ms !important; }
 
-  @media (max-width: 700px) {
+  @media (max-width: 767px) {
     .about__artboard { transform: none; }
+  }
+
+  @media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+    .about__artboard { transform: translateX(-50%); }
   }
 }

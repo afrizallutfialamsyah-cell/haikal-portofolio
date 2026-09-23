@@ -99,7 +99,7 @@ function resetAboutPhoto() {
 }
 
 function moveAboutPhoto(event) {
-  if (reducedMotion.matches || window.matchMedia('(max-width: 700px)').matches) return;
+  if (reducedMotion.matches || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
 
   const bounds = aboutPhotoHitbox.getBoundingClientRect();
   const x = (event.clientX - bounds.left) / bounds.width - 0.5;
