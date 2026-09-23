@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  color-scheme: dark;
+  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  background: #343236;
+}
+
+* { box-sizing: border-box; }
+
+html, body, main { margin: 0; min-height: 100%; }
+html { scroll-behavior: smooth; }
+
+body { overflow-x: hidden; }
+
+.intro {
+  --intro-fade-duration: 1.35s;
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  background: #343236;
+  opacity: 1;
+  transition: opacity var(--intro-fade-duration) ease;
+}
+
+.intro__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+html.intro-active,
+html.intro-active body { overflow: hidden; }
+
+html.intro-active .hero {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--intro-fade-duration, 1.35s) ease;
+}
+
+html.intro-revealing .hero { opacity: 1; }
+html.intro-revealing .intro { opacity: 0; }
+
+.hero {
+  --artboard-width: min(141.44vh, 100vw);
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #343236;
+}
+
+.hero__background,
+.hero__artboard,
+.hero__artboard > img,
+.hero__overlay {
+  position: absolute;
+}
+
+.hero-header {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 30px;
+  color: #fff;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.hero-header a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hero-header a:hover,
+.hero-header a:focus-visible {
+  opacity: 0.68;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  outline: none;
+}
+
+.hero-header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.9rem;
+}
+
+.hero__background {
+  z-index: -3;
+  inset: -1.25%;
+  width: 102.5%;
+  height: 102.5%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__artboard {
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: var(--artboard-width);
+  aspect-ratio: 2000 / 1414;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hero__artboard > img {
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero__overlay {
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.hero__badge {
+  z-index: 2;
+}
+
+.hero__wordmark {
+  z-index: 3;
+}
+
+.hero__meta {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  color: #fff;
+  font-size: clamp(0.84rem, 1.7vw, 1.9rem);
+  line-height: 1;
+}
+
+.hero-label,
+.hero-year {
+  position: absolute;
+  margin: 0;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.12em;
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: -0.045em;
+}
+
+.about {
+  --about-artboard-width: min(141.44vh, 100vw);
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #f7f1e8;
+}
+
+.about__background,
+.about__artboard,
+.about__layer,
+.about__photo-hitbox {
+  position: absolute;
+}
+
+.about__background {
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about__artboard {
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: var(--about-artboard-width);
+  aspect-ratio: 2000 / 1414;
+  transform: translate(-50%, calc(-50% + 16px));
+  opacity: 0;
+  transition: opacity 650ms ease, transform 650ms ease;
+}
+
+.about.is-visible .about__artboard {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.about__layer {
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.about__photo {
+  transition: transform 260ms ease-out;
+  will-change: transform;
+}
+
+.about__photo-hitbox {
+  z-index: 1;
+  top: 7%;
+  left: 5.2%;
+  width: 24%;
+  height: 39%;
+  cursor: default;
+}
+
+.hero-label span { font-weight: 400; }
+.hero-label strong { font-size: 0.68em; font-weight: 700; }
+.hero-label:hover,
+.hero-label:focus-visible { text-decoration: underline; outline: none; }
+
+.hero-label--branding { left: max(4vw, calc(50% - var(--artboard-width) * .395)); top: 14.25%; }
+.hero-label--graphic { left: max(5.1vw, calc(50% - var(--artboard-width) * .375)); bottom: 13.1%; }
+.hero-label--illustration { right: max(5.8vw, calc(50% - var(--artboard-width) * .365)); bottom: 13.55%; }
+
+.hero-year {
+  right: max(3.7vw, calc(50% - var(--artboard-width) * .45));
+  bottom: 5.4%;
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+@media (max-width: 700px) {
+  .hero { --artboard-width: 112vh; }
+  .hero-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 20px;
+    font-size: 0.56rem;
+  }
+  .hero-header__nav { gap: 0.55rem; }
+  .hero__background { object-position: 47% center; }
+  .hero__meta { font-size: clamp(0.85rem, 5.2vw, 1.35rem); }
+  .hero-label--branding { left: 7vw; top: 10%; }
+  .hero-label--graphic { left: 7vw; bottom: 10.2%; }
+  .hero-label--illustration { right: 7vw; bottom: 15%; }
+  .hero-year { right: 7vw; bottom: 8.2%; }
+
+  .about {
+    height: 1100px;
+    min-height: 100svh;
+  }
+  .about__background { object-position: center; }
+  .about__artboard {
+    inset: 0;
+    width: 100%;
+    height: 1100px;
+    aspect-ratio: auto;
+    transform: translateY(16px);
+  }
+  .about.is-visible .about__artboard { transform: none; }
+  .about__layer { width: auto; height: auto; object-fit: initial; }
+  .about__photo { width: 256vw; left: -30px; top: 25px; }
+  .about__name { width: 308vw; left: -270px; top: 233px; }
+  .about__education { width: 256vw; left: -572px; top: 372px; }
+  .about__description { width: 205vw; left: -36px; top: 303px; }
+  .about__contact { width: 267vw; left: -60px; top: 327px; }
+  .about__apps { width: 231vw; left: -457px; top: 640px; }
+  .about__logo { width: 205vw; left: -279px; top: 632px; }
+  .about__photo-hitbox { left: 20px; top: 65px; width: 200px; height: 225px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+  .about__artboard {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    transition: none;
+  }
+  .about__photo { transition: none; }
+  .intro, .hero { transition-duration: 160ms !important; }
+
+  @media (max-width: 700px) {
+    .about__artboard { transform: none; }
+  }
+}

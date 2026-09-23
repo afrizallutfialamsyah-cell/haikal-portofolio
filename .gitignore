@@ -1,0 +1,20 @@
+# Local design references (kept in the workspace, not published)
+reference/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor and temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.tmp
+*.log
+
+# Local dependency and build artifacts
+node_modules/
+dist/
