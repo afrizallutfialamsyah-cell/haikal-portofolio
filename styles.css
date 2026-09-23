@@ -233,6 +233,123 @@ html.intro-revealing .intro { opacity: 0; }
   cursor: default;
 }
 
+.branding-chapter {
+  --branding-artboard-width: min(141.44vh, 100vw);
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #343236;
+}
+
+.branding-chapter__background,
+.branding-chapter__overlay,
+.branding-chapter__artboard,
+.branding-chapter__artboard > img {
+  position: absolute;
+}
+
+.branding-chapter__background {
+  z-index: -3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.branding-chapter__overlay {
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms ease;
+}
+
+.branding-chapter__artboard {
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: var(--branding-artboard-width);
+  aspect-ratio: 2000 / 1414;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.branding-chapter__artboard > img {
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.branding-chapter__badge {
+  opacity: 0;
+  transform: scale(0.978);
+  transition: opacity 700ms ease 100ms, transform 700ms ease 100ms;
+}
+
+.branding-chapter__title {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 620ms ease 240ms, transform 620ms ease 240ms;
+}
+
+.branding-chapter__meta {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  color: #fff;
+  font-size: clamp(0.84rem, 1.7vw, 1.9rem);
+  line-height: 1;
+}
+
+.branding-chapter__label,
+.branding-chapter__year {
+  position: absolute;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 480ms ease 310ms;
+}
+
+.branding-chapter__label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.12em;
+  letter-spacing: -0.045em;
+}
+
+.branding-chapter__label span { font-weight: 400; }
+.branding-chapter__label strong { font-size: 0.68em; font-weight: 700; }
+.branding-chapter__label--top { left: max(4vw, calc(50% - var(--branding-artboard-width) * .395)); top: 14.25%; }
+.branding-chapter__label--bottom { left: max(5.1vw, calc(50% - var(--branding-artboard-width) * .375)); bottom: 13.1%; }
+
+.branding-chapter__year {
+  right: max(3.7vw, calc(50% - var(--branding-artboard-width) * .45));
+  bottom: 5.4%;
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.branding-chapter.is-visible .branding-chapter__background,
+.branding-chapter.is-visible .branding-chapter__overlay,
+.branding-chapter.is-visible .branding-chapter__badge,
+.branding-chapter.is-visible .branding-chapter__title,
+.branding-chapter.is-visible .branding-chapter__label,
+.branding-chapter.is-visible .branding-chapter__year { opacity: 1; }
+
+.branding-chapter.is-visible .branding-chapter__badge { transform: scale(1); }
+.branding-chapter.is-visible .branding-chapter__title { transform: translateY(0); }
+
 .hero-label span { font-weight: 400; }
 .hero-label strong { font-size: 0.68em; font-weight: 700; }
 .hero-label:hover,
@@ -289,6 +406,12 @@ html.intro-revealing .intro { opacity: 0; }
   .about__apps { width: 231vw; left: -457px; top: 640px; }
   .about__logo { width: 205vw; left: -279px; top: 632px; }
   .about__photo-hitbox { left: 20px; top: 65px; width: 200px; height: 225px; }
+  .branding-chapter { --branding-artboard-width: 112vh; }
+  .branding-chapter__background { object-position: 47% center; }
+  .branding-chapter__meta { font-size: clamp(0.85rem, 5.2vw, 1.35rem); }
+  .branding-chapter__label--top { left: 7vw; top: 10%; }
+  .branding-chapter__label--bottom { left: 7vw; bottom: 10.2%; }
+  .branding-chapter__year { right: 7vw; bottom: 8.2%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -299,6 +422,17 @@ html.intro-revealing .intro { opacity: 0; }
     transition: none;
   }
   .about__photo { transition: none; }
+  .branding-chapter__background,
+  .branding-chapter__overlay,
+  .branding-chapter__badge,
+  .branding-chapter__title,
+  .branding-chapter__label,
+  .branding-chapter__year {
+    opacity: 1;
+    transition: none;
+  }
+  .branding-chapter__badge,
+  .branding-chapter__title { transform: none; }
   .intro, .hero { transition-duration: 160ms !important; }
 
   @media (max-width: 700px) {

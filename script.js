@@ -112,3 +112,19 @@ if (aboutPhoto && aboutPhotoHitbox) {
   aboutPhotoHitbox.addEventListener('pointermove', moveAboutPhoto);
   aboutPhotoHitbox.addEventListener('pointerleave', resetAboutPhoto);
 }
+
+const brandingChapter = document.querySelector('.branding-chapter');
+
+if (brandingChapter) {
+  const brandingObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        brandingChapter.classList.add('is-visible');
+        brandingObserver.unobserve(brandingChapter);
+      }
+    },
+    { threshold: 0.16 }
+  );
+
+  brandingObserver.observe(brandingChapter);
+}
