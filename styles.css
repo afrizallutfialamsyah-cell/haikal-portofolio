@@ -12,6 +12,7 @@ html, body, main { margin: 0; min-height: 100%; }
 html { scroll-behavior: smooth; }
 
 body { overflow-x: hidden; }
+main { position: relative; }
 
 .intro {
   --intro-fade-duration: 1.35s;
@@ -19,16 +20,40 @@ body { overflow-x: hidden; }
   z-index: 100;
   inset: 0;
   overflow: hidden;
-  background: #343236;
+  background: transparent;
   opacity: 1;
-  transition: opacity var(--intro-fade-duration) ease;
 }
 
 .intro__video {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 360ms ease;
+}
+
+.intro__glitch {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.intro__bone { fill: #f7f1e8; }
+
+.intro__window {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleX(0);
+}
+
+.intro__window:nth-of-type(odd) { --window-shift: -20px; }
+.intro__window:nth-of-type(even) { --window-shift: 18px; }
 }
 
 html.intro-active,
@@ -41,7 +66,57 @@ html.intro-active .hero {
 }
 
 html.intro-revealing .hero { opacity: 1; }
-html.intro-revealing .intro { opacity: 0; }
+html.intro-revealing .intro {
+  animation: intro-handoff var(--intro-fade-duration) ease forwards;
+}
+html.intro-revealing .intro__video { opacity: 0; }
+html.intro-revealing .intro__window { animation: intro-window-open 740ms cubic-bezier(.65, 0, .35, 1) forwards; }
+html.intro-revealing .intro__window--1,
+html.intro-revealing .intro__window--8,
+html.intro-revealing .intro__window--15,
+html.intro-revealing .intro__window--22 { animation-delay: 30ms; }
+html.intro-revealing .intro__window--2,
+html.intro-revealing .intro__window--9,
+html.intro-revealing .intro__window--16,
+html.intro-revealing .intro__window--23 { animation-delay: 100ms; }
+html.intro-revealing .intro__window--3,
+html.intro-revealing .intro__window--10,
+html.intro-revealing .intro__window--17,
+html.intro-revealing .intro__window--24 { animation-delay: 170ms; }
+html.intro-revealing .intro__window--4,
+html.intro-revealing .intro__window--11,
+html.intro-revealing .intro__window--18,
+html.intro-revealing .intro__window--25 { animation-delay: 240ms; }
+html.intro-revealing .intro__window--5,
+html.intro-revealing .intro__window--12,
+html.intro-revealing .intro__window--19,
+html.intro-revealing .intro__window--26 { animation-delay: 310ms; }
+html.intro-revealing .intro__window--6,
+html.intro-revealing .intro__window--13,
+html.intro-revealing .intro__window--20,
+html.intro-revealing .intro__window--27 { animation-delay: 380ms; }
+html.intro-revealing .intro__window--7,
+html.intro-revealing .intro__window--14,
+html.intro-revealing .intro__window--21,
+html.intro-revealing .intro__window--28 { animation-delay: 450ms; }
+
+html.intro-fallback .intro {
+  animation: none;
+  opacity: 0;
+  transition: opacity var(--intro-fade-duration) ease;
+}
+html.intro-fallback .intro__glitch { opacity: 0; }
+
+@keyframes intro-handoff {
+  0%, 22% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes intro-window-open {
+  0% { transform: translateX(var(--window-shift, 0)) scaleX(.04); }
+  65% { transform: translateX(0) scaleX(1); }
+  100% { transform: translateX(0) scaleX(1.32); }
+}
 
 .hero {
   --artboard-width: min(141.44vh, 100vw);
@@ -52,6 +127,27 @@ html.intro-revealing .intro { opacity: 0; }
   height: 100svh;
   overflow: hidden;
   background: #343236;
+  z-index: 1;
+}
+
+.hero-about-scene {
+  position: relative;
+  background: #f7f1e8;
+}
+
+.hero-about-backdrop {
+  position: sticky;
+  z-index: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  margin-bottom: -100vh;
+  margin-bottom: -100svh;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
 }
 
 .hero__background,
@@ -168,6 +264,35 @@ html.intro-revealing .intro { opacity: 0; }
   letter-spacing: -0.045em;
 }
 
+.about-scroll-scene {
+  position: relative;
+  z-index: 1;
+  background: #f7f1e8;
+}
+
+.about-scroll-scene > .about {
+  position: relative;
+}
+
+@media (min-width: 901px) {
+  .hero-about-scene {
+    height: 300svh;
+  }
+
+  .hero-about-scene > .hero {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    margin-bottom: -100svh;
+  }
+
+  .hero-about-scene > .about-scroll-scene {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+}
+
 .about {
   --about-artboard-width: min(141.44vh, 100vw);
   isolation: isolate;
@@ -177,6 +302,7 @@ html.intro-revealing .intro { opacity: 0; }
   height: 100svh;
   overflow: hidden;
   background: #f7f1e8;
+  z-index: 1;
 }
 
 .about__background,
@@ -350,6 +476,70 @@ html.intro-revealing .intro { opacity: 0; }
 .branding-chapter.is-visible .branding-chapter__badge { transform: scale(1); }
 .branding-chapter.is-visible .branding-chapter__title { transform: translateY(0); }
 
+/* Pages 04–07 use their supplied transparent artboard layers. Keeping every
+   layer on the same canvas preserves the reference composition at any size. */
+.portfolio-page {
+  --portfolio-reveal: 0;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2000 / 1414;
+  overflow: hidden;
+  background: transparent;
+}
+
+.portfolio-page__background,
+.portfolio-page__artboard,
+.portfolio-page__layer {
+  position: absolute;
+}
+
+.portfolio-page__background {
+  z-index: -2;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.portfolio-page__artboard {
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.portfolio-page__layer {
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.portfolio-page__background,
+.portfolio-page__artboard {
+  opacity: var(--portfolio-reveal);
+  transform: translateY(calc((1 - var(--portfolio-reveal)) * 18px)) scale(calc(.98 + var(--portfolio-reveal) * .02));
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.portfolio-page--six .portfolio-page__layer {
+  object-fit: contain;
+}
+
+@media (max-width: 767px) {
+  .portfolio-page {
+    height: auto;
+    aspect-ratio: 2000 / 1414;
+  }
+}
+
 .hero-label span { font-weight: 400; }
 .hero-label strong { font-size: 0.68em; font-weight: 700; }
 .hero-label:hover,
@@ -459,8 +649,86 @@ html.intro-revealing .intro { opacity: 0; }
   .about__photo-hitbox { left: 20px; top: 65px; width: 200px; height: 225px; }
 }
 
+html.hero-about-scroll .hero {
+  transform: translate3d(var(--hero-scroll-x, 0px), var(--hero-scroll-y, 0px), 0) scale(var(--hero-scroll-scale, 1));
+  transform-origin: center;
+  opacity: var(--hero-scroll-opacity, 1);
+}
+
+html.hero-about-scroll.is-hero-gone .hero {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+html.hero-about-scroll .hero > .hero-header {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-header--scroll-lock {
+  position: fixed;
+  z-index: 90;
+  color: var(--persistent-header-color, #f7f1e8);
+  pointer-events: auto;
+  transition: color 280ms ease;
+}
+
+/* The project spreads intentionally alternate dark photography and white
+   layouts. Difference keeps the inherited header readable over both without
+   changing the locked Page 01–03 header treatment. */
+html.is-over-portfolio-project .hero-header--scroll-lock {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+html.hero-about-scroll.is-hero-about-transitioning .hero,
+html.hero-about-scroll.is-hero-about-transitioning .about__artboard,
+html.hero-about-scroll .about__apps,
+html.hero-about-scroll .about__contact {
+  will-change: transform, opacity;
+}
+
+html.hero-about-scroll .about .about__artboard {
+  opacity: var(--about-scroll-opacity, 0);
+  transform: translate(calc(-50% + var(--about-scroll-x, 0px)), -50%);
+  transition: none;
+}
+
+html.hero-about-scroll .about__apps {
+  opacity: var(--about-apps-opacity, 0);
+  transform: translate3d(var(--about-apps-x, 46vw), 0, 0);
+}
+
+html.hero-about-scroll .about__contact {
+  opacity: var(--about-contact-opacity, 0);
+  transform: translate3d(var(--about-contact-x, 46vw), 0, 0);
+}
+
+@media (max-width: 767px) {
+  html.hero-about-scroll .about .about__artboard {
+    transform: translateX(calc(-50% + var(--about-scroll-x, 0px)));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  html.hero-about-scroll .about .about__artboard {
+    transform: translateX(calc(-50% + var(--about-scroll-x, 0px)));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
+  .hero-about-scene { height: auto; }
+  .hero-about-scene > .hero {
+    position: relative;
+    top: auto;
+    margin-bottom: 0;
+  }
+  .hero-about-scene > .about-scroll-scene {
+    position: relative;
+    top: auto;
+    height: auto;
+  }
   .about__artboard {
     opacity: 1;
     transform: translate(-50%, -50%);
@@ -478,8 +746,14 @@ html.intro-revealing .intro { opacity: 0; }
   }
   .branding-chapter__badge,
   .branding-chapter__title { transform: none; }
+  .portfolio-page__background,
+  .portfolio-page__artboard {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
   .intro, .hero { transition-duration: 160ms !important; }
-
+  .intro__glitch { display: none; }
   @media (max-width: 767px) {
     .about__artboard { transform: none; }
   }

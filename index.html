@@ -12,13 +12,51 @@
       <video class="intro__video" autoplay muted playsinline preload="auto">
         <source src="public/assets/intro/logo%20motion%20haikal.mp4" type="video/mp4" />
       </video>
+      <svg class="intro__glitch" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <mask id="intro-window-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
+            <rect width="1000" height="1000" fill="white" />
+            <polygon class="intro__window intro__window--1" points="41,0 275,0 234,180 0,180" fill="black" />
+            <polygon class="intro__window intro__window--2" points="745,0 1000,0 955,130 700,130" fill="black" />
+            <polygon class="intro__window intro__window--3" points="113,145 270,145 242,250 85,250" fill="black" />
+            <polygon class="intro__window intro__window--4" points="474,110 780,110 726,280 420,280" fill="black" />
+            <polygon class="intro__window intro__window--5" points="36,285 240,285 204,435 0,435" fill="black" />
+            <polygon class="intro__window intro__window--6" points="669,310 1000,310 941,415 610,415" fill="black" />
+            <polygon class="intro__window intro__window--7" points="240,370 435,370 400,495 205,495" fill="black" />
+            <polygon class="intro__window intro__window--8" points="482,455 635,455 608,615 455,615" fill="black" />
+            <polygon class="intro__window intro__window--9" points="35,530 230,530 195,665 0,665" fill="black" />
+            <polygon class="intro__window intro__window--10" points="775,480 1000,480 960,655 735,655" fill="black" />
+            <polygon class="intro__window intro__window--11" points="189,600 440,600 396,705 145,705" fill="black" />
+            <polygon class="intro__window intro__window--12" points="540,660 825,660 775,795 490,795" fill="black" />
+            <polygon class="intro__window intro__window--13" points="35,730 235,730 200,855 0,855" fill="black" />
+            <polygon class="intro__window intro__window--14" points="826,750 1000,750 969,875 795,875" fill="black" />
+            <polygon class="intro__window intro__window--15" points="293,815 480,815 447,1000 260,1000" fill="black" />
+            <polygon class="intro__window intro__window--16" points="568,855 780,855 742,1000 530,1000" fill="black" />
+            <polygon class="intro__window intro__window--17" points="327,25 425,25 408,115 310,115" fill="black" />
+            <polygon class="intro__window intro__window--18" points="563,245 665,245 647,325 545,325" fill="black" />
+            <polygon class="intro__window intro__window--19" points="315,510 400,510 385,585 300,585" fill="black" />
+            <polygon class="intro__window intro__window--20" points="607,530 705,530 688,610 590,610" fill="black" />
+            <polygon class="intro__window intro__window--21" points="268,690 370,690 352,770 250,770" fill="black" />
+            <polygon class="intro__window intro__window--22" points="386,760 488,760 470,840 368,840" fill="black" />
+            <polygon class="intro__window intro__window--23" points="63,875 190,875 167,965 40,965" fill="black" />
+            <polygon class="intro__window intro__window--24" points="678,30 750,30 737,95 665,95" fill="black" />
+            <polygon class="intro__window intro__window--25" points="877,235 1000,235 978,320 855,320" fill="black" />
+            <polygon class="intro__window intro__window--26" points="489,350 570,350 556,420 475,420" fill="black" />
+            <polygon class="intro__window intro__window--27" points="234,445 315,445 301,520 220,520" fill="black" />
+            <polygon class="intro__window intro__window--28" points="672,820 765,820 748,905 655,905" fill="black" />
+          </mask>
+        </defs>
+        <rect class="intro__bone" width="1000" height="1000" mask="url(#intro-window-mask)" />
+      </svg>
     </div>
     <main>
+      <div class="hero-about-scene">
+      <img class="hero-about-backdrop" src="public/assets/about/background-page-2.png" alt="" aria-hidden="true" />
       <section class="hero" aria-label="Haikal portfolio introduction">
         <header class="hero-header">
           <a class="hero-header__name" href="#top">HAIKAL PRAMMANA</a>
           <nav class="hero-header__nav" aria-label="Portfolio categories">
-            <a href="#branding">BRANDING</a>
+            <a href="#about">BRANDING</a>
             <span aria-hidden="true">|</span>
             <a href="#illustration">ILLUSTRATION</a>
             <span aria-hidden="true">|</span>
@@ -34,7 +72,7 @@
         </div>
 
         <div class="hero__meta">
-          <a class="hero-label hero-label--branding" href="#branding">
+          <a class="hero-label hero-label--branding" href="#about">
             <span>(01)</span><strong>Branding</strong>
           </a>
           <a class="hero-label hero-label--graphic" href="#graphic-design">
@@ -47,6 +85,7 @@
         </div>
       </section>
 
+      <div class="about-scroll-scene">
       <section class="about" id="about" aria-label="About Akhmad Haikal Prammana">
         <img class="about__background" src="public/assets/about/background-page-2.png" alt="" loading="lazy" />
         <div class="about__artboard">
@@ -60,8 +99,10 @@
           <div class="about__photo-hitbox" aria-hidden="true"></div>
         </div>
       </section>
+      </div>
+      </div>
 
-      <section class="branding-chapter" id="branding" aria-label="Branding chapter">
+      <section class="branding-chapter" id="graphic-design" aria-label="Branding chapter">
         <img class="branding-chapter__background" src="public/assets/branding/background.png" alt="" />
         <img class="branding-chapter__overlay" src="public/assets/hero/hero-overlay.png" alt="" />
         <div class="branding-chapter__artboard" aria-hidden="true">
@@ -72,6 +113,53 @@
           <p class="branding-chapter__label branding-chapter__label--top"><span>(01)</span><strong>Branding</strong></p>
           <p class="branding-chapter__label branding-chapter__label--bottom"><span>(03)</span><strong>Graphic Design</strong></p>
           <p class="branding-chapter__year">2026</p>
+        </div>
+      </section>
+
+      <section class="portfolio-page portfolio-page--four" id="project-natlouwy-opening" aria-label="Natlouwy Bakehouse project introduction">
+        <img class="portfolio-page__background" src="public/assets/page-4/bg-page-4.png" alt="" loading="lazy" />
+        <div class="portfolio-page__artboard" aria-hidden="true">
+          <img class="portfolio-page__layer" src="public/assets/page-4/judul-page-4.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-4/roti-page-4.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-4/text-page-4.png" alt="" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="portfolio-page portfolio-page--five" aria-label="Natlouwy Bakehouse branding project">
+        <img class="portfolio-page__background" src="public/assets/page-5/bg-page-5.png" alt="" loading="lazy" />
+        <div class="portfolio-page__artboard" aria-hidden="true">
+          <img class="portfolio-page__layer" src="public/assets/page-5/object-page-5.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-5/text page 5.png" alt="" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="portfolio-page portfolio-page--six" aria-label="Natlouwy Bakehouse visual applications">
+        <div class="portfolio-page__artboard">
+          <img class="portfolio-page__layer" src="public/assets/page-6/page-6.png" alt="Natlouwy Bakehouse visual applications" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="portfolio-page portfolio-page--seven" aria-label="Letino social media project">
+        <img class="portfolio-page__background" src="public/assets/page-7/bg-page-7.png" alt="" loading="lazy" />
+        <div class="portfolio-page__artboard" aria-hidden="true">
+          <img class="portfolio-page__layer" src="public/assets/page-7/bg-putih-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/gambar-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/hp-1-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/hp-2-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/hp-3-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/star-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/text-page-7.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-7/tulisan-sosmed-page-7.png" alt="" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="portfolio-page portfolio-page--eight" aria-label="Boura social media college project">
+        <img class="portfolio-page__background" src="public/assets/page-8/bg page 8.png" alt="" loading="lazy" />
+        <div class="portfolio-page__artboard" aria-hidden="true">
+          <img class="portfolio-page__layer" src="public/assets/page-8/desain page 8.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-8/desain melayang page 8.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-8/hp page 8.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/page-8/text page 8.png" alt="" loading="lazy" />
         </div>
       </section>
     </main>
