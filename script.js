@@ -597,6 +597,7 @@ function initialisePageFourteenFifteenScroll() {
   const pageFourteenBackground = pageFourteen?.querySelector('.portfolio-page__background');
   const pageFourteenArtboard = pageFourteen?.querySelector('.portfolio-page__artboard');
   const pageFifteen = stage?.querySelector('.portfolio-page--fifteen');
+  const pageFourteenAssets = pageFourteen ? [...pageFourteen.querySelectorAll('img')] : [];
 
   if (!scene || !stage || !pageFourteen || !pageFourteenBackground || !pageFourteenArtboard || !pageFifteen || reducedMotion.matches) return;
   if (window.innerWidth <= 900) return;
@@ -604,6 +605,7 @@ function initialisePageFourteenFifteenScroll() {
   let frameRequested = false;
   let sceneStart = 0;
   let transitionActive = false;
+  let motionStartProgress = null;
 
   const clamp = (value) => Math.min(1, Math.max(0, value));
   const smooth = (value) => value * value * (3 - 2 * value);
@@ -618,9 +620,20 @@ function initialisePageFourteenFifteenScroll() {
     const scrollDistance = Math.max(1, scene.offsetHeight - window.innerHeight);
     const progress = clamp((window.scrollY - sceneStart) / scrollDistance);
     const hasStarted = window.scrollY >= sceneStart - 1;
-    const pageFourteenProgress = smooth(clamp((progress - 0.12) / 0.6));
-    const pageFifteenProgress = smooth(clamp((progress - 0.44) / 0.44));
-    const pageFourteenOpacity = 1 - clamp((progress - 0.62) / 0.13);
+    const assetsReady = pageFourteenAssets.every((asset) => asset.complete && asset.naturalWidth > 0);
+
+    if (!hasStarted) {
+      motionStartProgress = null;
+    } else if (assetsReady && motionStartProgress === null) {
+      motionStartProgress = progress;
+    }
+
+    const motionProgress = motionStartProgress === null
+      ? 0
+      : clamp((progress - motionStartProgress) / Math.max(0.001, 1 - motionStartProgress));
+    const pageFourteenProgress = smooth(clamp(motionProgress / 0.7));
+    const pageFifteenProgress = smooth(clamp((motionProgress - 0.4) / 0.46));
+    const pageFourteenOpacity = 1 - clamp((motionProgress - 0.62) / 0.13);
     const wasTransitionActive = transitionActive;
 
     if (hasStarted && !wasTransitionActive) {
@@ -640,7 +653,12 @@ function initialisePageFourteenFifteenScroll() {
     document.documentElement.classList.toggle('is-page-fourteen-fifteen-transitioning', hasStarted);
     transitionActive = hasStarted;
 
+    if (hasStarted) {
+      pageFourteen.style.setProperty('--portfolio-reveal', '1');
+    }
+
     if (!hasStarted && wasTransitionActive) {
+      pageFourteen.style.removeProperty('--portfolio-reveal');
       pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-top');
       pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-left');
       pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-width');

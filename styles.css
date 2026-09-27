@@ -794,7 +794,7 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   .page-fourteen-fifteen-scene {
     z-index: 3;
     height: 420svh;
-    margin-top: calc(-100vw * 1414 / 2000);
+    margin-top: -100svh;
   }
 
   .page-fourteen-fifteen-stage {
