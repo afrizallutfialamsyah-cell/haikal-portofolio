@@ -139,6 +139,7 @@ function initialiseHeroAboutScroll() {
   lockedHeader.classList.add('hero-header--scroll-lock');
   document.body.append(lockedHeader);
   heroHeader.setAttribute('aria-hidden', 'true');
+  heroHeader.inert = true;
 
   document.querySelectorAll('a[href="#about"]').forEach((link) => {
     link.addEventListener('click', (event) => {
@@ -269,6 +270,43 @@ function initialiseHeroAboutScroll() {
 }
 
 initialiseHeroAboutScroll();
+
+function initialiseMobileHeaderMenu() {
+  const header = document.querySelector('.hero-header--scroll-lock');
+  const toggle = header?.querySelector('.hero-header__menu-toggle');
+  const navigation = header?.querySelector('.hero-header__nav');
+  if (!header || !toggle || !navigation) return;
+
+  function closeMenu() {
+    header.classList.remove('is-menu-open');
+    document.documentElement.classList.remove('is-mobile-menu-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation menu');
+  }
+
+  function toggleMenu(event) {
+    event.stopPropagation();
+    const willOpen = !header.classList.contains('is-menu-open');
+    header.classList.toggle('is-menu-open', willOpen);
+    document.documentElement.classList.toggle('is-mobile-menu-open', willOpen);
+    toggle.setAttribute('aria-expanded', String(willOpen));
+    toggle.setAttribute('aria-label', willOpen ? 'Close navigation menu' : 'Open navigation menu');
+  }
+
+  toggle.addEventListener('click', toggleMenu);
+  navigation.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('click', (event) => {
+    if (!header.contains(event.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 767) closeMenu();
+  });
+}
+
+initialiseMobileHeaderMenu();
 
 function initialiseAboutBrandingScroll() {
   const scene = document.querySelector('.about-branding-scene');
@@ -545,6 +583,98 @@ function initialisePageTwentyPhoneHover() {
 }
 
 initialisePageTwentyPhoneHover();
+
+function initialiseMobileTapInteractions() {
+  const usesTouchInteraction = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (!usesTouchInteraction || reducedMotion.matches) return;
+
+  const groups = [
+    {
+      pageSelector: '.portfolio-page--five',
+      targetSelector: '.page-five__object',
+      activeClass: 'is-pointer-over-object'
+    },
+    {
+      pageSelector: '.portfolio-page--seven',
+      targetSelector: '.page-seven__phone',
+      activeClass: 'is-pointer-over-phone'
+    },
+    {
+      pageSelector: '.portfolio-page--twenty',
+      targetSelector: '.page-twenty__phone',
+      activeClass: 'is-pointer-over-phone'
+    }
+  ];
+
+  const registeredTargets = [];
+  let activeTarget = null;
+
+  function clearActiveTarget() {
+    if (!activeTarget) return;
+    activeTarget.element.classList.remove(activeTarget.activeClass);
+    activeTarget = null;
+  }
+
+  function createHitMap(element) {
+    if (!element.naturalWidth || !element.naturalHeight) return null;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return null;
+    canvas.width = element.naturalWidth;
+    canvas.height = element.naturalHeight;
+    context.drawImage(element, 0, 0);
+    return { canvas, context };
+  }
+
+  function isOpaqueAtPoint(target, clientX, clientY) {
+    const hitMap = target.hitMap;
+    if (!hitMap) return false;
+    const bounds = target.element.getBoundingClientRect();
+    const x = Math.floor(((clientX - bounds.left) / bounds.width) * hitMap.canvas.width);
+    const y = Math.floor(((clientY - bounds.top) / bounds.height) * hitMap.canvas.height);
+    if (x < 0 || y < 0 || x >= hitMap.canvas.width || y >= hitMap.canvas.height) return false;
+    return hitMap.context.getImageData(x, y, 1, 1).data[3] > 20;
+  }
+
+  groups.forEach(({ pageSelector, targetSelector, activeClass }) => {
+    const page = document.querySelector(pageSelector);
+    const elements = [...(page?.querySelectorAll(targetSelector) || [])];
+    if (!page || !elements.length) return;
+
+    const targets = elements.map((element) => {
+      const target = { element, activeClass, hitMap: null };
+      const prepare = () => { target.hitMap = createHitMap(element); };
+      if (element.complete) prepare();
+      else element.addEventListener('load', prepare, { once: true });
+      registeredTargets.push(target);
+      return target;
+    });
+
+    page.addEventListener('click', (event) => {
+      const tappedTarget = [...targets]
+        .reverse()
+        .find((target) => isOpaqueAtPoint(target, event.clientX, event.clientY));
+
+      if (!tappedTarget) {
+        clearActiveTarget();
+        return;
+      }
+
+      event.stopPropagation();
+      const shouldClose = activeTarget?.element === tappedTarget.element;
+      clearActiveTarget();
+      if (shouldClose) return;
+
+      tappedTarget.element.classList.add(tappedTarget.activeClass);
+      activeTarget = tappedTarget;
+    });
+  });
+
+  if (!registeredTargets.length) return;
+  document.addEventListener('click', clearActiveTarget);
+}
+
+initialiseMobileTapInteractions();
 
 function initialisePageEightNineScroll() {
   const scene = document.querySelector('.page-eight-nine-scene');
