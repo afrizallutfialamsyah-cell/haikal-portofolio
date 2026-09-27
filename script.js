@@ -156,6 +156,26 @@ function initialiseHeroAboutScroll() {
     });
   });
 
+  function scrollToDesktopScene(event, sceneSelector) {
+    if (window.innerWidth <= 900 || reducedMotion.matches) return;
+
+    const scene = document.querySelector(sceneSelector);
+    if (!scene) return;
+
+    event.preventDefault();
+    const sceneTop = window.scrollY + scene.getBoundingClientRect().top;
+    const scrollDistance = Math.max(0, scene.offsetHeight - window.innerHeight);
+    window.scrollTo({ top: sceneTop + scrollDistance, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('a[href="#graphic-design"]').forEach((link) => {
+    link.addEventListener('click', (event) => scrollToDesktopScene(event, '.about-branding-scene'));
+  });
+
+  document.querySelectorAll('a[href="#illustration"]').forEach((link) => {
+    link.addEventListener('click', (event) => scrollToDesktopScene(event, '.page-eight-nine-scene'));
+  });
+
   let frameRequested = false;
 
   function updateTransition() {
@@ -245,6 +265,427 @@ function initialiseHeroAboutScroll() {
 }
 
 initialiseHeroAboutScroll();
+
+function initialiseAboutBrandingScroll() {
+  const scene = document.querySelector('.about-branding-scene');
+  const stage = scene?.querySelector('.about-branding-stage');
+  const graphicDesign = stage?.querySelector('.branding-chapter');
+  const originalAbout = document.querySelector('.about-scroll-scene > .about');
+  const originalAboutArtboard = originalAbout?.querySelector('.about__artboard');
+
+  if (
+    !scene ||
+    !stage ||
+    !graphicDesign ||
+    !originalAbout ||
+    !originalAboutArtboard ||
+    reducedMotion.matches
+  ) return;
+
+  if (window.innerWidth <= 900) return;
+
+  let frameRequested = false;
+  let sceneStart = 0;
+  let transitionActive = false;
+
+  const clamp = (value) => Math.min(1, Math.max(0, value));
+  const smooth = (value) => value * value * (3 - 2 * value);
+
+  function measureScene() {
+    sceneStart = window.scrollY + scene.getBoundingClientRect().top;
+  }
+
+  function resetMobileState() {
+    stage.style.removeProperty('visibility');
+    originalAbout.style.removeProperty('visibility');
+    originalAboutArtboard.style.removeProperty('--about-exit-opacity');
+    originalAboutArtboard.style.removeProperty('--about-exit-x');
+    originalAboutArtboard.style.removeProperty('--about-exit-y');
+    originalAboutArtboard.style.removeProperty('--about-exit-scale');
+    originalAboutArtboard.style.removeProperty('--about-native-top');
+    originalAboutArtboard.style.removeProperty('--about-native-left');
+    originalAboutArtboard.style.removeProperty('--about-native-width');
+    originalAboutArtboard.style.removeProperty('--about-native-height');
+    graphicDesign.style.removeProperty('opacity');
+    graphicDesign.style.removeProperty('transform');
+    document.documentElement.classList.remove('is-about-branding-transitioning');
+    transitionActive = false;
+  }
+
+  function updateScene() {
+    frameRequested = false;
+
+    const scrollDistance = Math.max(1, scene.offsetHeight - window.innerHeight);
+    const progress = clamp((window.scrollY - sceneStart) / scrollDistance);
+    const hasStarted = window.scrollY >= sceneStart - 1;
+    const isMobile = window.innerWidth <= 900;
+    const aboutProgress = smooth(clamp((progress - 0.02) / 0.7));
+    const graphicProgress = smooth(clamp((progress - 0.4) / 0.46));
+    const aboutOpacity = 1 - clamp((progress - 0.62) / 0.13);
+
+    const wasTransitionActive = transitionActive;
+    if (hasStarted && !wasTransitionActive) {
+      const bounds = originalAboutArtboard.getBoundingClientRect();
+      originalAboutArtboard.style.setProperty('--about-native-top', `${bounds.top}px`);
+      originalAboutArtboard.style.setProperty('--about-native-left', `${bounds.left}px`);
+      originalAboutArtboard.style.setProperty('--about-native-width', `${bounds.width}px`);
+      originalAboutArtboard.style.setProperty('--about-native-height', `${bounds.height}px`);
+    }
+
+    stage.style.visibility = hasStarted ? 'visible' : 'hidden';
+    document.documentElement.classList.toggle('is-about-branding-transitioning', hasStarted);
+    transitionActive = hasStarted;
+
+    if (!hasStarted && wasTransitionActive) {
+      originalAboutArtboard.style.removeProperty('--about-native-top');
+      originalAboutArtboard.style.removeProperty('--about-native-left');
+      originalAboutArtboard.style.removeProperty('--about-native-width');
+      originalAboutArtboard.style.removeProperty('--about-native-height');
+    }
+
+    originalAboutArtboard.style.setProperty('--about-exit-opacity', aboutOpacity.toFixed(3));
+    originalAboutArtboard.style.setProperty('--about-exit-x', `${(isMobile ? -58 : -72) * aboutProgress}vw`);
+    originalAboutArtboard.style.setProperty('--about-exit-y', `${(isMobile ? -52 : -68) * aboutProgress}vh`);
+    originalAboutArtboard.style.setProperty('--about-exit-scale', (1 - (isMobile ? 0.28 : 0.34) * aboutProgress).toFixed(4));
+
+    graphicDesign.style.opacity = graphicProgress.toFixed(3);
+    graphicDesign.style.transform = `translate3d(${(isMobile ? 32 : 46) * (1 - graphicProgress)}vw, ${(isMobile ? 24 : 30) * (1 - graphicProgress)}vh, 0) scale(${((isMobile ? 0.82 : 0.74) + (isMobile ? 0.18 : 0.26) * graphicProgress).toFixed(4)})`;
+
+    if (hasStarted && graphicProgress < 0.72) {
+      document.documentElement.style.setProperty('--persistent-header-color', '#343236');
+    }
+  }
+
+  function requestSceneUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateScene);
+  }
+
+  function handleResize() {
+    measureScene();
+    requestSceneUpdate();
+  }
+
+  measureScene();
+  window.addEventListener('scroll', requestSceneUpdate, { passive: true });
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('load', handleResize, { once: true });
+  requestSceneUpdate();
+}
+
+initialiseAboutBrandingScroll();
+
+function initialisePageFiveObjectHover() {
+  const page = document.querySelector('.portfolio-page--five');
+  const objects = [...(page?.querySelectorAll('.page-five__object') || [])];
+
+  if (!page || !objects.length || reducedMotion.matches || !window.matchMedia('(hover: hover)').matches) return;
+
+  const hitMaps = new Map();
+  let frameRequested = false;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function prepareHitMap(object) {
+    if (!object.naturalWidth || !object.naturalHeight) return;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return;
+    canvas.width = object.naturalWidth;
+    canvas.height = object.naturalHeight;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(object, 0, 0);
+    hitMaps.set(object, { canvas, context });
+  }
+
+  function updateHoverState() {
+    frameRequested = false;
+
+    objects.forEach((object) => {
+      const hitMap = hitMaps.get(object);
+      if (!hitMap) return;
+      const bounds = object.getBoundingClientRect();
+      const x = Math.floor(((pointerX - bounds.left) / bounds.width) * hitMap.canvas.width);
+      const y = Math.floor(((pointerY - bounds.top) / bounds.height) * hitMap.canvas.height);
+      const inside = x >= 0 && y >= 0 && x < hitMap.canvas.width && y < hitMap.canvas.height;
+      const alpha = inside ? hitMap.context.getImageData(x, y, 1, 1).data[3] : 0;
+      object.classList.toggle('is-pointer-over-object', alpha > 20);
+    });
+  }
+
+  page.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateHoverState);
+  }, { passive: true });
+
+  page.addEventListener('pointerleave', () => {
+    objects.forEach((object) => object.classList.remove('is-pointer-over-object'));
+  });
+
+  objects.forEach((object) => {
+    if (object.complete) prepareHitMap(object);
+    else object.addEventListener('load', () => prepareHitMap(object), { once: true });
+  });
+}
+
+initialisePageFiveObjectHover();
+
+function initialisePageSevenPhoneHover() {
+  const page = document.querySelector('.portfolio-page--seven');
+  const phones = [...(page?.querySelectorAll('.page-seven__phone') || [])];
+
+  if (!page || !phones.length || reducedMotion.matches || !window.matchMedia('(hover: hover)').matches) return;
+
+  const hitMaps = new Map();
+  let frameRequested = false;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function prepareHitMap(phone) {
+    if (!phone.naturalWidth || !phone.naturalHeight) return;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return;
+    canvas.width = phone.naturalWidth;
+    canvas.height = phone.naturalHeight;
+    context.drawImage(phone, 0, 0);
+    hitMaps.set(phone, { canvas, context });
+  }
+
+  function updateHoverState() {
+    frameRequested = false;
+
+    phones.forEach((phone) => {
+      const hitMap = hitMaps.get(phone);
+      if (!hitMap) return;
+      const bounds = phone.getBoundingClientRect();
+      const x = Math.floor(((pointerX - bounds.left) / bounds.width) * hitMap.canvas.width);
+      const y = Math.floor(((pointerY - bounds.top) / bounds.height) * hitMap.canvas.height);
+      const inside = x >= 0 && y >= 0 && x < hitMap.canvas.width && y < hitMap.canvas.height;
+      const alpha = inside ? hitMap.context.getImageData(x, y, 1, 1).data[3] : 0;
+      phone.classList.toggle('is-pointer-over-phone', alpha > 20);
+    });
+  }
+
+  page.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateHoverState);
+  }, { passive: true });
+
+  page.addEventListener('pointerleave', () => {
+    phones.forEach((phone) => phone.classList.remove('is-pointer-over-phone'));
+  });
+
+  phones.forEach((phone) => {
+    if (phone.complete) prepareHitMap(phone);
+    else phone.addEventListener('load', () => prepareHitMap(phone), { once: true });
+  });
+}
+
+initialisePageSevenPhoneHover();
+
+function initialisePageEightNineScroll() {
+  const scene = document.querySelector('.page-eight-nine-scene');
+  const stage = scene?.querySelector('.page-eight-nine-stage');
+  const pageEight = document.querySelector('.portfolio-page--eight');
+  const pageEightArtboard = pageEight?.querySelector('.portfolio-page__artboard');
+  const pageNine = stage?.querySelector('.portfolio-page--nine');
+
+  if (!scene || !stage || !pageEight || !pageEightArtboard || !pageNine || reducedMotion.matches) return;
+
+  if (window.innerWidth <= 900) return;
+
+  let frameRequested = false;
+  let sceneStart = 0;
+  let transitionActive = false;
+
+  const clamp = (value) => Math.min(1, Math.max(0, value));
+  const smooth = (value) => value * value * (3 - 2 * value);
+
+  function measureScene() {
+    sceneStart = window.scrollY + scene.getBoundingClientRect().top;
+  }
+
+  function resetMobileState() {
+    stage.style.removeProperty('visibility');
+    pageEightArtboard.style.removeProperty('--page-eight-exit-opacity');
+    pageEightArtboard.style.removeProperty('--page-eight-exit-x');
+    pageEightArtboard.style.removeProperty('--page-eight-exit-y');
+    pageEightArtboard.style.removeProperty('--page-eight-exit-scale');
+    pageEightArtboard.style.removeProperty('--page-eight-native-top');
+    pageEightArtboard.style.removeProperty('--page-eight-native-left');
+    pageEightArtboard.style.removeProperty('--page-eight-native-width');
+    pageEightArtboard.style.removeProperty('--page-eight-native-height');
+    pageNine.style.removeProperty('opacity');
+    pageNine.style.removeProperty('transform');
+    document.documentElement.classList.remove('is-page-eight-nine-transitioning');
+    transitionActive = false;
+  }
+
+  function updateScene() {
+    frameRequested = false;
+
+    const scrollDistance = Math.max(1, scene.offsetHeight - window.innerHeight);
+    const progress = clamp((window.scrollY - sceneStart) / scrollDistance);
+    const hasStarted = window.scrollY >= sceneStart - 1;
+    const pageEightProgress = smooth(clamp((progress - 0.02) / 0.7));
+    const pageNineProgress = smooth(clamp((progress - 0.4) / 0.46));
+    const pageEightOpacity = 1 - clamp((progress - 0.62) / 0.13);
+    const isMobile = window.innerWidth <= 900;
+
+    const wasTransitionActive = transitionActive;
+
+    if (hasStarted && !wasTransitionActive) {
+      const bounds = pageEightArtboard.getBoundingClientRect();
+      pageEightArtboard.style.setProperty('--page-eight-native-top', `${bounds.top}px`);
+      pageEightArtboard.style.setProperty('--page-eight-native-left', `${bounds.left}px`);
+      pageEightArtboard.style.setProperty('--page-eight-native-width', `${bounds.width}px`);
+      pageEightArtboard.style.setProperty('--page-eight-native-height', `${bounds.height}px`);
+    }
+
+    stage.style.visibility = hasStarted ? 'visible' : 'hidden';
+    document.documentElement.classList.toggle('is-page-eight-nine-transitioning', hasStarted);
+    transitionActive = hasStarted;
+
+    if (!hasStarted && wasTransitionActive) {
+      pageEightArtboard.style.removeProperty('--page-eight-native-top');
+      pageEightArtboard.style.removeProperty('--page-eight-native-left');
+      pageEightArtboard.style.removeProperty('--page-eight-native-width');
+      pageEightArtboard.style.removeProperty('--page-eight-native-height');
+    }
+
+    pageEightArtboard.style.setProperty('--page-eight-exit-opacity', pageEightOpacity.toFixed(3));
+    pageEightArtboard.style.setProperty('--page-eight-exit-x', `${(isMobile ? -58 : -72) * pageEightProgress}vw`);
+    pageEightArtboard.style.setProperty('--page-eight-exit-y', `${(isMobile ? -52 : -68) * pageEightProgress}vh`);
+    pageEightArtboard.style.setProperty('--page-eight-exit-scale', (1 - (isMobile ? 0.28 : 0.34) * pageEightProgress).toFixed(4));
+
+    pageNine.style.opacity = pageNineProgress.toFixed(3);
+    pageNine.style.transform = `translate3d(${(isMobile ? 32 : 46) * (1 - pageNineProgress)}vw, ${(isMobile ? 24 : 30) * (1 - pageNineProgress)}vh, 0) scale(${((isMobile ? 0.82 : 0.74) + (isMobile ? 0.18 : 0.26) * pageNineProgress).toFixed(4)})`;
+  }
+
+  function requestSceneUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateScene);
+  }
+
+  function handleResize() {
+    measureScene();
+    requestSceneUpdate();
+  }
+
+  measureScene();
+  window.addEventListener('scroll', requestSceneUpdate, { passive: true });
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('load', handleResize, { once: true });
+  requestSceneUpdate();
+}
+
+initialisePageEightNineScroll();
+
+function initialisePageFourteenFifteenScroll() {
+  const scene = document.querySelector('.page-fourteen-fifteen-scene');
+  const stage = scene?.querySelector('.page-fourteen-fifteen-stage');
+  const pageFourteen = document.querySelector('.portfolio-page--fourteen');
+  const pageFourteenBackground = pageFourteen?.querySelector('.portfolio-page__background');
+  const pageFourteenArtboard = pageFourteen?.querySelector('.portfolio-page__artboard');
+  const pageFifteen = stage?.querySelector('.portfolio-page--fifteen');
+
+  if (!scene || !stage || !pageFourteen || !pageFourteenBackground || !pageFourteenArtboard || !pageFifteen || reducedMotion.matches) return;
+  if (window.innerWidth <= 900) return;
+
+  let frameRequested = false;
+  let sceneStart = 0;
+  let transitionActive = false;
+
+  const clamp = (value) => Math.min(1, Math.max(0, value));
+  const smooth = (value) => value * value * (3 - 2 * value);
+
+  function measureScene() {
+    sceneStart = window.scrollY + scene.getBoundingClientRect().top;
+  }
+
+  function updateScene() {
+    frameRequested = false;
+
+    const scrollDistance = Math.max(1, scene.offsetHeight - window.innerHeight);
+    const progress = clamp((window.scrollY - sceneStart) / scrollDistance);
+    const hasStarted = window.scrollY >= sceneStart - 1;
+    const pageFourteenProgress = smooth(clamp((progress - 0.12) / 0.6));
+    const pageFifteenProgress = smooth(clamp((progress - 0.44) / 0.44));
+    const pageFourteenOpacity = 1 - clamp((progress - 0.62) / 0.13);
+    const wasTransitionActive = transitionActive;
+
+    if (hasStarted && !wasTransitionActive) {
+      const backgroundBounds = pageFourteenBackground.getBoundingClientRect();
+      const bounds = pageFourteenArtboard.getBoundingClientRect();
+      pageFourteenBackground.style.setProperty('--page-fourteen-background-native-top', `${backgroundBounds.top}px`);
+      pageFourteenBackground.style.setProperty('--page-fourteen-background-native-left', `${backgroundBounds.left}px`);
+      pageFourteenBackground.style.setProperty('--page-fourteen-background-native-width', `${backgroundBounds.width}px`);
+      pageFourteenBackground.style.setProperty('--page-fourteen-background-native-height', `${backgroundBounds.height}px`);
+      pageFourteenArtboard.style.setProperty('--page-fourteen-native-top', `${bounds.top}px`);
+      pageFourteenArtboard.style.setProperty('--page-fourteen-native-left', `${bounds.left}px`);
+      pageFourteenArtboard.style.setProperty('--page-fourteen-native-width', `${bounds.width}px`);
+      pageFourteenArtboard.style.setProperty('--page-fourteen-native-height', `${bounds.height}px`);
+    }
+
+    stage.style.visibility = hasStarted ? 'visible' : 'hidden';
+    document.documentElement.classList.toggle('is-page-fourteen-fifteen-transitioning', hasStarted);
+    transitionActive = hasStarted;
+
+    if (!hasStarted && wasTransitionActive) {
+      pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-top');
+      pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-left');
+      pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-width');
+      pageFourteenBackground.style.removeProperty('--page-fourteen-background-native-height');
+      pageFourteenArtboard.style.removeProperty('--page-fourteen-native-top');
+      pageFourteenArtboard.style.removeProperty('--page-fourteen-native-left');
+      pageFourteenArtboard.style.removeProperty('--page-fourteen-native-width');
+      pageFourteenArtboard.style.removeProperty('--page-fourteen-native-height');
+    }
+
+    const pageFourteenExitOpacity = pageFourteenOpacity.toFixed(3);
+    const pageFourteenExitX = `${-72 * pageFourteenProgress}vw`;
+    const pageFourteenExitY = `${-68 * pageFourteenProgress}vh`;
+    const pageFourteenExitScale = (1 - 0.34 * pageFourteenProgress).toFixed(4);
+
+    [pageFourteenBackground, pageFourteenArtboard].forEach((layer) => {
+      layer.style.setProperty('--page-fourteen-exit-opacity', pageFourteenExitOpacity);
+      layer.style.setProperty('--page-fourteen-exit-x', pageFourteenExitX);
+      layer.style.setProperty('--page-fourteen-exit-y', pageFourteenExitY);
+      layer.style.setProperty('--page-fourteen-exit-scale', pageFourteenExitScale);
+    });
+
+    pageFifteen.style.opacity = pageFifteenProgress.toFixed(3);
+    pageFifteen.style.transform = `translate3d(${46 * (1 - pageFifteenProgress)}vw, ${30 * (1 - pageFifteenProgress)}vh, 0) scale(${(0.74 + 0.26 * pageFifteenProgress).toFixed(4)})`;
+  }
+
+  function requestSceneUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateScene);
+  }
+
+  function handleResize() {
+    measureScene();
+    requestSceneUpdate();
+  }
+
+  measureScene();
+  window.addEventListener('scroll', requestSceneUpdate, { passive: true });
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('load', handleResize, { once: true });
+  requestSceneUpdate();
+}
+
+initialisePageFourteenFifteenScroll();
 
 const brandingChapter = document.querySelector('.branding-chapter');
 

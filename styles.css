@@ -54,7 +54,6 @@ main { position: relative; }
 
 .intro__window:nth-of-type(odd) { --window-shift: -20px; }
 .intro__window:nth-of-type(even) { --window-shift: 18px; }
-}
 
 html.intro-active,
 html.intro-active body { overflow: hidden; }
@@ -276,7 +275,7 @@ html.intro-fallback .intro__glitch { opacity: 0; }
 
 @media (min-width: 901px) {
   .hero-about-scene {
-    height: 300svh;
+    height: 420svh;
   }
 
   .hero-about-scene > .hero {
@@ -290,6 +289,35 @@ html.intro-fallback .intro__glitch { opacity: 0; }
     position: sticky;
     top: 0;
     height: 100svh;
+  }
+}
+
+@media (max-width: 900px) {
+  .about-branding-scene {
+    position: relative;
+    z-index: auto;
+    height: auto;
+    margin-top: 0;
+  }
+  .about-branding-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+    visibility: visible;
+    background: transparent;
+  }
+  .about-branding-stage::before {
+    display: none;
+  }
+  .about-branding-stage > .branding-chapter {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    width: 100%;
+    height: 100svh;
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -476,7 +504,82 @@ html.intro-fallback .intro__glitch { opacity: 0; }
 .branding-chapter.is-visible .branding-chapter__badge { transform: scale(1); }
 .branding-chapter.is-visible .branding-chapter__title { transform: translateY(0); }
 
-/* Pages 04–07 use their supplied transparent artboard layers. Keeping every
+.about-branding-scene,
+.about-branding-stage { position: relative; }
+
+@media (min-width: 901px) {
+  .about-branding-scene {
+    position: relative;
+    z-index: 3;
+    height: 420svh;
+    margin-top: -100svh;
+    background: transparent;
+  }
+
+  .about-branding-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    visibility: hidden;
+    background: transparent;
+  }
+
+  .about-branding-stage::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: #f7f1e8;
+  }
+
+  .about-branding-stage > .branding-chapter {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .about-branding-stage > .branding-chapter {
+    z-index: 1;
+    opacity: var(--branding-enter-opacity, 0);
+    transform: translate3d(var(--branding-enter-x, 46vw), var(--branding-enter-y, 30vh), 0)
+      scale(var(--branding-enter-scale, 0.74));
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  html.hero-about-scroll.is-about-branding-transitioning .about-scroll-scene {
+    z-index: 4;
+    background: transparent;
+  }
+
+  html.hero-about-scroll.is-about-branding-transitioning .about {
+    background: transparent;
+    pointer-events: none;
+  }
+
+  html.hero-about-scroll.is-about-branding-transitioning .about__background {
+    opacity: 0;
+  }
+
+  html.hero-about-scroll.is-about-branding-transitioning .about .about__artboard {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    opacity: var(--about-exit-opacity, 1);
+    transform: translate(
+        calc(-50% + var(--about-exit-x, 0vw)),
+        calc(-50% + var(--about-exit-y, 0vh))
+      ) scale(var(--about-exit-scale, 1));
+    transition: none;
+    will-change: transform, opacity;
+  }
+}
+
+/* Pages 04–24 use their supplied transparent artboard layers. Keeping every
    layer on the same canvas preserves the reference composition at any size. */
 .portfolio-page {
   --portfolio-reveal: 0;
@@ -533,11 +636,304 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   object-fit: contain;
 }
 
+.page-five__object {
+  transform: translateY(0) scale(1);
+  transform-origin: var(--object-origin-x) var(--object-origin-y);
+  transition: transform 360ms cubic-bezier(.2, .8, .2, 1), filter 360ms ease;
+  will-change: transform;
+}
+
+.page-five__object--logo-character { --object-origin-x: 32.25%; --object-origin-y: 22.63%; }
+.page-five__object--logo { --object-origin-x: 67%; --object-origin-y: 28.64%; }
+.page-five__object--face { --object-origin-x: 26%; --object-origin-y: 52.69%; }
+.page-five__object--seated { --object-origin-x: 41.75%; --object-origin-y: 54.10%; }
+.page-five__object--torso { --object-origin-x: 57.75%; --object-origin-y: 52.69%; }
+.page-five__object--cookie { --object-origin-x: 72.75%; --object-origin-y: 52.33%; }
+
+.page-five__object.is-pointer-over-object {
+  transform: translateY(-10px) scale(1.045);
+  filter: drop-shadow(0 14px 18px rgb(52 50 54 / 16%));
+}
+
+.page-seven__phone {
+  transform: translateY(0) scale(1);
+  transform-origin: var(--phone-origin-x) var(--phone-origin-y);
+  transition: transform 360ms cubic-bezier(.2, .8, .2, 1), filter 360ms ease;
+  will-change: transform;
+}
+
+.page-seven__phone--one { --phone-origin-x: 22.5%; --phone-origin-y: 44.8%; }
+.page-seven__phone--two { --phone-origin-x: 36.9%; --phone-origin-y: 50%; }
+.page-seven__phone--three { --phone-origin-x: 9.4%; --phone-origin-y: 47%; }
+
+.page-seven__phone.is-pointer-over-phone {
+  z-index: 8;
+  transform: translateY(-12px) scale(1.05);
+  filter: drop-shadow(0 16px 20px rgb(0 0 0 / 22%));
+}
+
+.portfolio-page--eight::before {
+  content: '';
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 4vw;
+  right: 4vw;
+  height: 1px;
+  background: rgb(52 50 54 / 42%);
+  pointer-events: none;
+}
+
+.page-eight-nine-scene,
+.page-eight-nine-stage { position: relative; }
+
+@media (min-width: 901px) {
+  .page-eight-nine-scene {
+    position: relative;
+    z-index: 3;
+    height: 420svh;
+    margin-top: -100svh;
+  }
+
+  .page-eight-nine-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    visibility: hidden;
+    background: #343236 url('public/assets/page-8/bg page 8.png') center / contain no-repeat;
+  }
+
+  .page-eight-nine-stage > .portfolio-page--nine {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    opacity: var(--page-nine-enter-opacity, 0);
+    transform: translate3d(var(--page-nine-enter-x, 46vw), var(--page-nine-enter-y, 30vh), 0)
+      scale(var(--page-nine-enter-scale, .74));
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__background,
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__artboard {
+    opacity: 1;
+  }
+
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__artboard {
+    transform: translate(-50%, -50%);
+  }
+
+  html.hero-about-scroll.is-page-eight-nine-transitioning .portfolio-page--eight {
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  html.hero-about-scroll.is-page-eight-nine-transitioning .portfolio-page--eight .portfolio-page__background {
+    opacity: 0;
+  }
+
+  html.hero-about-scroll.is-page-eight-nine-transitioning .portfolio-page--eight .portfolio-page__artboard {
+    position: fixed;
+    inset: auto;
+    z-index: 4;
+    top: var(--page-eight-native-top, 0px);
+    left: var(--page-eight-native-left, 0px);
+    width: var(--page-eight-native-width, 100vw);
+    height: var(--page-eight-native-height, 100svh);
+    opacity: var(--page-eight-exit-opacity, 1);
+    transform: translate(
+        calc(var(--page-eight-exit-x, 0vw)),
+        calc(var(--page-eight-exit-y, 0vh))
+      ) scale(var(--page-eight-exit-scale, 1));
+    transform-origin: center;
+    transition: none;
+    will-change: transform, opacity;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-eight-nine-scene {
+    position: relative;
+    z-index: auto;
+    height: auto;
+    margin-top: 0;
+  }
+  .page-eight-nine-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+    visibility: visible;
+    background: none;
+  }
+  .page-eight-nine-stage > .portfolio-page--nine {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    width: 100%;
+    height: 100svh;
+    aspect-ratio: auto;
+    opacity: 1;
+    transform: none;
+  }
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__background,
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__artboard { opacity: 1; }
+  .page-eight-nine-stage > .portfolio-page--nine > .portfolio-page__artboard { transform: translate(-50%, -50%); }
+}
+
+.page-fourteen-fifteen-scene,
+.page-fourteen-fifteen-stage { position: relative; }
+
+@media (min-width: 901px) {
+  .page-fourteen-fifteen-scene {
+    z-index: 3;
+    height: 420svh;
+    margin-top: calc(-100vw * 1414 / 2000);
+  }
+
+  .page-fourteen-fifteen-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    visibility: hidden;
+    background: transparent;
+  }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: var(--page-fifteen-enter-opacity, 0);
+    transform: translate3d(var(--page-fifteen-enter-x, 46vw), var(--page-fifteen-enter-y, 30vh), 0)
+      scale(var(--page-fifteen-enter-scale, .74));
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__background,
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__artboard { opacity: 1; }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__artboard {
+    transform: translate(-50%, -50%);
+  }
+
+  html.hero-about-scroll.is-page-fourteen-fifteen-transitioning .portfolio-page--fourteen {
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  html.hero-about-scroll.is-page-fourteen-fifteen-transitioning .portfolio-page--fourteen .portfolio-page__background {
+    position: fixed;
+    inset: auto;
+    z-index: 3;
+    top: var(--page-fourteen-background-native-top, 0px);
+    left: var(--page-fourteen-background-native-left, 0px);
+    width: var(--page-fourteen-background-native-width, 100vw);
+    height: var(--page-fourteen-background-native-height, 100svh);
+    opacity: var(--page-fourteen-exit-opacity, 1);
+    transform: translate(
+        calc(var(--page-fourteen-exit-x, 0vw)),
+        calc(var(--page-fourteen-exit-y, 0vh))
+      ) scale(var(--page-fourteen-exit-scale, 1));
+    transform-origin: center;
+    transition: none;
+    will-change: transform, opacity;
+  }
+
+  html.hero-about-scroll.is-page-fourteen-fifteen-transitioning .portfolio-page--fourteen .portfolio-page__artboard {
+    position: fixed;
+    inset: auto;
+    z-index: 4;
+    top: var(--page-fourteen-native-top, 0px);
+    left: var(--page-fourteen-native-left, 0px);
+    width: var(--page-fourteen-native-width, 100vw);
+    height: var(--page-fourteen-native-height, 100svh);
+    opacity: var(--page-fourteen-exit-opacity, 1);
+    transform: translate(
+        calc(var(--page-fourteen-exit-x, 0vw)),
+        calc(var(--page-fourteen-exit-y, 0vh))
+      ) scale(var(--page-fourteen-exit-scale, 1));
+    transform-origin: center;
+    transition: none;
+    will-change: transform, opacity;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-fourteen-fifteen-scene {
+    height: auto;
+    margin-top: 0;
+    z-index: auto;
+  }
+
+  .page-fourteen-fifteen-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    isolation: auto;
+    visibility: visible;
+    background: none;
+  }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 100svh;
+    opacity: 1;
+    transform: none;
+  }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__background,
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__artboard { opacity: 1; }
+
+  .page-fourteen-fifteen-stage > .portfolio-page--fifteen > .portfolio-page__artboard {
+    transform: translate(-50%, -50%);
+  }
+}
+
 @media (max-width: 767px) {
   .portfolio-page {
     height: auto;
     aspect-ratio: 2000 / 1414;
   }
+}
+
+.portfolio-page--nine,
+.portfolio-page--fifteen {
+  height: 100vh;
+  height: 100svh;
+  aspect-ratio: auto;
+}
+
+.portfolio-page--nine .portfolio-page__background,
+.portfolio-page--fifteen .portfolio-page__background {
+  object-fit: cover;
+}
+
+.portfolio-page--nine .portfolio-page__artboard,
+.portfolio-page--fifteen .portfolio-page__artboard {
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  width: min(141.44vh, 100vw);
+  height: auto;
+  aspect-ratio: 2000 / 1414;
+  transform: translate(
+      -50%,
+      calc(-50% + ((1 - var(--portfolio-reveal)) * 18px))
+    ) scale(calc(.98 + var(--portfolio-reveal) * .02));
 }
 
 .hero-label span { font-weight: 400; }
@@ -613,6 +1009,8 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   .about__logo { width: 700px; right: 3px; left: auto; top: 686px; }
   .about__photo-hitbox { left: 18px; top: 24px; width: 220px; height: 245px; }
   .branding-chapter { --branding-artboard-width: min(130vw, 85svh); }
+  .portfolio-page--nine .portfolio-page__artboard,
+  .portfolio-page--fifteen .portfolio-page__artboard { width: min(130vw, 85svh); }
   .branding-chapter__background { object-position: 47% center; }
   .branding-chapter__meta { font-size: clamp(0.85rem, 5.2vw, 1.35rem); }
   .branding-chapter__label--top { left: 7vw; top: 15%; }
@@ -623,6 +1021,8 @@ html.intro-fallback .intro__glitch { opacity: 0; }
 @media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
   .hero { --artboard-width: min(112vw, 85svh); }
   .branding-chapter { --branding-artboard-width: min(112vw, 85svh); }
+  .portfolio-page--nine .portfolio-page__artboard,
+  .portfolio-page--fifteen .portfolio-page__artboard { width: min(112vw, 85svh); }
 
   .about {
     height: 1160px;
@@ -735,6 +1135,44 @@ html.hero-about-scroll .about__contact {
     transition: none;
   }
   .about__photo { transition: none; }
+  .about-branding-scene {
+    height: auto;
+    margin-top: 0;
+    z-index: auto;
+  }
+  .about-branding-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    visibility: visible;
+  }
+  .about-branding-stage > .branding-chapter {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+  }
+  .page-eight-nine-scene {
+    height: auto;
+    margin-top: 0;
+    z-index: auto;
+  }
+  .page-eight-nine-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    visibility: visible;
+    background: none;
+  }
+  .page-eight-nine-stage > .portfolio-page--nine {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2000 / 1414;
+    opacity: 1;
+    transform: none;
+  }
   .branding-chapter__background,
   .branding-chapter__overlay,
   .branding-chapter__badge,
