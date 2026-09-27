@@ -495,6 +495,57 @@ function initialisePageSevenPhoneHover() {
 
 initialisePageSevenPhoneHover();
 
+function initialisePageTwentyPhoneHover() {
+  const page = document.querySelector('.portfolio-page--twenty');
+  const phone = page?.querySelector('.page-twenty__phone');
+
+  if (!page || !phone || reducedMotion.matches || !window.matchMedia('(hover: hover)').matches) return;
+
+  let hitMap;
+  let frameRequested = false;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function prepareHitMap() {
+    if (!phone.naturalWidth || !phone.naturalHeight) return;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return;
+    canvas.width = phone.naturalWidth;
+    canvas.height = phone.naturalHeight;
+    context.drawImage(phone, 0, 0);
+    hitMap = { canvas, context };
+  }
+
+  function updateHoverState() {
+    frameRequested = false;
+    if (!hitMap) return;
+    const bounds = phone.getBoundingClientRect();
+    const x = Math.floor(((pointerX - bounds.left) / bounds.width) * hitMap.canvas.width);
+    const y = Math.floor(((pointerY - bounds.top) / bounds.height) * hitMap.canvas.height);
+    const inside = x >= 0 && y >= 0 && x < hitMap.canvas.width && y < hitMap.canvas.height;
+    const alpha = inside ? hitMap.context.getImageData(x, y, 1, 1).data[3] : 0;
+    phone.classList.toggle('is-pointer-over-phone', alpha > 20);
+  }
+
+  page.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateHoverState);
+  }, { passive: true });
+
+  page.addEventListener('pointerleave', () => {
+    phone.classList.remove('is-pointer-over-phone');
+  });
+
+  if (phone.complete) prepareHitMap();
+  else phone.addEventListener('load', prepareHitMap, { once: true });
+}
+
+initialisePageTwentyPhoneHover();
+
 function initialisePageEightNineScroll() {
   const scene = document.querySelector('.page-eight-nine-scene');
   const stage = scene?.querySelector('.page-eight-nine-stage');
@@ -708,6 +759,49 @@ function initialisePageFourteenFifteenScroll() {
 }
 
 initialisePageFourteenFifteenScroll();
+
+function initialisePageNineteenMarkerRoll() {
+  const page = document.querySelector('.portfolio-page--nineteen');
+  const subtitle = document.querySelector('.page-nineteen__subtitle');
+  if (!page || !subtitle) return;
+
+  const labels = ['(01)', '(02)', '(03)', '(04)', '(05)', '(06)', '(07)', '(08)'];
+  const rollOrder = ['(03)', '(04)', '(01)', '(02)', '(05)', '(07)', '(08)', '(06)'];
+  const markers = [...subtitle.querySelectorAll('.page-nineteen__marker')];
+
+  markers.forEach((marker) => {
+    const finalLabel = marker.textContent.trim();
+    const targetIndex = labels.indexOf(finalLabel);
+    if (targetIndex === -1) return;
+
+    const reel = document.createElement('span');
+    reel.className = 'page-nineteen__marker-reel';
+
+    for (let step = 0; step <= 23; step += 1) {
+      const value = document.createElement('span');
+      value.textContent = labels[(targetIndex + 1 + step) % labels.length];
+      reel.append(value);
+    }
+
+    marker.replaceChildren(reel);
+    marker.style.setProperty('--reel-stop', '23');
+    marker.style.setProperty('--reel-delay', `${rollOrder.indexOf(finalLabel) * 173}ms`);
+  });
+
+  if (reducedMotion.matches) {
+    page.classList.add('is-markers-visible');
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    ([entry]) => page.classList.toggle('is-markers-visible', entry.isIntersecting),
+    { threshold: 0.12 }
+  );
+
+  observer.observe(page);
+}
+
+initialisePageNineteenMarkerRoll();
 
 const brandingChapter = document.querySelector('.branding-chapter');
 

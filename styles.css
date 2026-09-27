@@ -387,6 +387,65 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   cursor: default;
 }
 
+.about__contact-link,
+.page-twenty-four__contact-link {
+  position: absolute;
+  z-index: 10;
+  display: block;
+  border-radius: 2px;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.about__contact-link:focus-visible,
+.page-twenty-four__contact-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.about__contact-link--email {
+  left: 9.4%;
+  top: 77.1%;
+  width: 21.8%;
+  height: 3.2%;
+}
+
+.about__contact-link--instagram {
+  left: 9.4%;
+  top: 80.5%;
+  width: 15.5%;
+  height: 4%;
+}
+
+.about__contact-link--whatsapp {
+  left: 9.6%;
+  top: 84.9%;
+  width: 16.7%;
+  height: 3.7%;
+}
+
+.page-twenty-four__contact-link--email {
+  left: 9.5%;
+  top: 77.3%;
+  width: 36.5%;
+  height: 5.1%;
+}
+
+.page-twenty-four__contact-link--instagram {
+  left: 9.5%;
+  top: 83.2%;
+  width: 26.5%;
+  height: 6.1%;
+}
+
+.page-twenty-four__contact-link--whatsapp {
+  left: 9.5%;
+  top: 90.3%;
+  width: 30.8%;
+  height: 6.1%;
+}
+
 .branding-chapter {
   --branding-artboard-width: min(141.44vh, 100vw);
   isolation: isolate;
@@ -632,8 +691,94 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   will-change: opacity, transform;
 }
 
+.page-nineteen__subtitle {
+  position: absolute;
+  inset: 0;
+  color: #91b9e5;
+  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  font-size: 2.65vw;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.page-nineteen__marker-slot,
+.page-nineteen__next {
+  position: absolute;
+  display: block;
+  white-space: nowrap;
+}
+
+.page-nineteen__marker-slot {
+  height: 1.1em;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.page-nineteen__marker {
+  display: block;
+  height: 1.1em;
+}
+
+.page-nineteen__marker-reel,
+.page-nineteen__marker-reel > span {
+  display: block;
+}
+
+.page-nineteen__marker-reel > span {
+  height: 1.1em;
+  line-height: 1.1;
+}
+
+.page-nineteen__marker-slot--03 { left: 23.5%; top: 10.45%; }
+.page-nineteen__marker-slot--04 { left: 52.0%; top: 10.45%; }
+.page-nineteen__marker-slot--01 { left: 72.7%; top: 22.25%; }
+.page-nineteen__marker-slot--02 { left: 39.45%; top: 38.45%; }
+.page-nineteen__marker-slot--05 { left: 14.0%; top: 58.25%; }
+.page-nineteen__marker-slot--06 { left: 72.55%; top: 58.25%; }
+.page-nineteen__marker-slot--07 { left: 25.45%; top: 78.6%; }
+.page-nineteen__marker-slot--08 { left: 57.5%; top: 76.1%; }
+
+.portfolio-page--nineteen.is-markers-visible .page-nineteen__marker {
+  animation: page-nineteen-marker-reel 520ms cubic-bezier(.12, .82, .22, 1) both;
+  animation-delay: var(--reel-delay, 0ms);
+}
+
+.portfolio-page--nineteen.is-markers-visible .page-nineteen__marker-slot {
+  opacity: 1;
+}
+
+@keyframes page-nineteen-marker-reel {
+  from { opacity: 0; transform: translateY(0); }
+  8% { opacity: 1; }
+  to { opacity: 1; transform: translateY(calc(var(--reel-stop) * -1.1em)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-nineteen__marker-slot { opacity: 1; }
+  .page-nineteen__marker {
+    animation: none !important;
+    opacity: 1;
+    transform: translateY(calc(var(--reel-stop) * -1.1em));
+  }
+}
+
+.page-nineteen__next {
+  right: 4.0%;
+  bottom: 5.45%;
+  font-size: 1.22em;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.075em;
+}
+
 .portfolio-page--six .portfolio-page__layer {
   object-fit: contain;
+}
+
+.page-ten__book-motion {
+  object-fit: contain;
+  object-position: center;
 }
 
 .page-five__object {
@@ -670,6 +815,26 @@ html.intro-fallback .intro__glitch { opacity: 0; }
   z-index: 8;
   transform: translateY(-12px) scale(1.05);
   filter: drop-shadow(0 16px 20px rgb(0 0 0 / 22%));
+}
+
+.page-twenty__phone {
+  cursor: default;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: 75% 60%;
+  transition: transform 420ms cubic-bezier(.2, .82, .2, 1), filter 420ms ease;
+  will-change: transform;
+}
+
+.page-twenty__phone.is-pointer-over-phone {
+  z-index: 8;
+  cursor: pointer;
+  animation: page-twenty-phone-float 1.7s ease-in-out infinite;
+  filter: drop-shadow(0 22px 24px rgb(0 0 0 / 28%));
+}
+
+@keyframes page-twenty-phone-float {
+  0%, 100% { transform: translate3d(0, -16px, 0) scale(1.06); }
+  50% { transform: translate3d(0, -30px, 0) scale(1.06); }
 }
 
 .portfolio-page--eight::before {
@@ -1084,7 +1249,8 @@ html.is-over-portfolio-project .hero-header--scroll-lock {
 html.hero-about-scroll.is-hero-about-transitioning .hero,
 html.hero-about-scroll.is-hero-about-transitioning .about__artboard,
 html.hero-about-scroll .about__apps,
-html.hero-about-scroll .about__contact {
+html.hero-about-scroll .about__contact,
+html.hero-about-scroll .about__contact-link {
   will-change: transform, opacity;
 }
 
@@ -1104,16 +1270,29 @@ html.hero-about-scroll .about__contact {
   transform: translate3d(var(--about-contact-x, 46vw), 0, 0);
 }
 
+html.hero-about-scroll .about__contact-link {
+  opacity: var(--about-contact-opacity, 0);
+  transform: translate3d(var(--about-contact-x, 46vw), 0, 0);
+}
+
 @media (max-width: 767px) {
   html.hero-about-scroll .about .about__artboard {
     transform: translateX(calc(-50% + var(--about-scroll-x, 0px)));
   }
+
+  .about__contact-link--email { left: 24px; top: 1012px; width: 220px; height: 27px; }
+  .about__contact-link--instagram { left: 24px; top: 1037px; width: 158px; height: 34px; }
+  .about__contact-link--whatsapp { left: 25px; top: 1068px; width: 172px; height: 29px; }
 }
 
 @media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
   html.hero-about-scroll .about .about__artboard {
     transform: translateX(calc(-50% + var(--about-scroll-x, 0px)));
   }
+
+  .about__contact-link--email { left: 38px; top: 892px; width: 224px; height: 25px; }
+  .about__contact-link--instagram { left: 38px; top: 917px; width: 156px; height: 34px; }
+  .about__contact-link--whatsapp { left: 40px; top: 950px; width: 170px; height: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

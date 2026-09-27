@@ -63,6 +63,8 @@
             <a href="#illustration">ILLUSTRATION</a>
             <span aria-hidden="true">|</span>
             <a href="#campaign">CAMPAIGN</a>
+            <span aria-hidden="true">|</span>
+            <a href="#contact">CONTACT</a>
           </nav>
         </header>
         <img class="hero__background" src="public/assets/hero/hero-background.png" alt="" />
@@ -96,6 +98,9 @@
           <img class="about__layer about__education" src="public/assets/about/Kampus-jurusan.png" alt="Telkom University, 2022–2026, Desain Komunikasi Visual" loading="lazy" />
           <img class="about__layer about__description" src="public/assets/about/Deskripsi-Profile.png" alt="Freelance graphic designer profile" loading="lazy" />
           <img class="about__layer about__contact" src="public/assets/about/Contact-profile.png" alt="Contact information" loading="lazy" />
+          <a class="about__contact-link about__contact-link--email" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=haikal.prmmna@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Haikal Prammana"></a>
+          <a class="about__contact-link about__contact-link--instagram" href="https://instagram.com/haikallpramana" target="_blank" rel="noopener noreferrer" aria-label="Instagram Haikal Pramana"></a>
+          <a class="about__contact-link about__contact-link--whatsapp" href="https://wa.me/6281386220359" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Haikal Pramana"></a>
           <img class="about__layer about__apps" src="public/assets/about/App-Profile.png" alt="Adobe Illustrator, Adobe InDesign, Adobe Photoshop, Affinity Designer, and Procreate" loading="lazy" />
           <img class="about__layer about__logo" src="public/assets/about/Logo-profile.png" alt="Haikal Prammana monogram" loading="lazy" />
           <div class="about__photo-hitbox" aria-hidden="true"></div>
@@ -190,8 +195,9 @@
       <section class="portfolio-page portfolio-page--ten" aria-label="Illustration project showcase">
         <img class="portfolio-page__background" src="public/assets/Page-10/bg-page-10.png" alt="" loading="lazy" />
         <div class="portfolio-page__artboard" aria-hidden="true">
-          <img class="portfolio-page__layer" src="public/assets/Page-10/image-1-page-10.png" alt="" loading="lazy" />
-          <img class="portfolio-page__layer" src="public/assets/Page-10/image-2-page-10.png" alt="" loading="lazy" />
+          <video class="portfolio-page__layer page-ten__book-motion" autoplay muted loop playsinline preload="metadata" disablepictureinpicture>
+            <source src="public/assets/Page-10/motion-buku-10.mp4" type="video/mp4" />
+          </video>
           <img class="portfolio-page__layer" src="public/assets/Page-10/text-page-10.png" alt="" loading="lazy" />
         </div>
       </section>
@@ -275,7 +281,17 @@
         <img class="portfolio-page__background" src="public/assets/Page-19/bg page 19.png" alt="" loading="lazy" />
         <div class="portfolio-page__artboard" aria-hidden="true">
           <img class="portfolio-page__layer" src="public/assets/Page-19/judul page 19.png" alt="" loading="lazy" />
-          <img class="portfolio-page__layer" src="public/assets/Page-19/subjudul page 19.png" alt="" loading="lazy" />
+          <div class="page-nineteen__subtitle">
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--03"><span class="page-nineteen__marker">(03)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--04"><span class="page-nineteen__marker">(04)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--01"><span class="page-nineteen__marker">(01)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--02"><span class="page-nineteen__marker">(02)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--05"><span class="page-nineteen__marker">(05)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--06"><span class="page-nineteen__marker">(06)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--07"><span class="page-nineteen__marker">(07)</span></span>
+            <span class="page-nineteen__marker-slot page-nineteen__marker-slot--08"><span class="page-nineteen__marker">(08)</span></span>
+            <span class="page-nineteen__next">Next slide</span>
+          </div>
         </div>
       </section>
 
@@ -283,10 +299,10 @@
         <img class="portfolio-page__background" src="public/assets/Page-20/bg page 20.png" alt="" loading="lazy" />
         <div class="portfolio-page__artboard" aria-hidden="true">
           <img class="portfolio-page__layer" src="public/assets/Page-20/shadow page 20.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer" src="public/assets/Page-20/bintang page 20.png" alt="" loading="lazy" />
           <img class="portfolio-page__layer" src="public/assets/Page-20/desain page 20.png" alt="" loading="lazy" />
           <img class="portfolio-page__layer" src="public/assets/Page-20/desain 2 page 20.png" alt="" loading="lazy" />
-          <img class="portfolio-page__layer" src="public/assets/Page-20/hp page 20.png" alt="" loading="lazy" />
-          <img class="portfolio-page__layer" src="public/assets/Page-20/bintang page 20.png" alt="" loading="lazy" />
+          <img class="portfolio-page__layer page-twenty__phone" src="public/assets/Page-20/hp page 20.png" alt="" loading="lazy" />
           <img class="portfolio-page__layer" src="public/assets/Page-20/judul page 20.png" alt="" loading="lazy" />
         </div>
       </section>
@@ -318,11 +334,14 @@
         </div>
       </section>
 
-      <section class="portfolio-page portfolio-page--twenty-four" aria-label="Portfolio contact and thank you">
+      <section class="portfolio-page portfolio-page--twenty-four" id="contact" aria-label="Portfolio contact and thank you">
         <img class="portfolio-page__background" src="public/assets/Page-24/bg page 24.png" alt="" loading="lazy" />
-        <div class="portfolio-page__artboard" aria-hidden="true">
+        <div class="portfolio-page__artboard">
           <img class="portfolio-page__layer" src="public/assets/Page-24/thank you page 24.png" alt="" loading="lazy" />
           <img class="portfolio-page__layer" src="public/assets/Page-24/kontak page 24.png" alt="" loading="lazy" />
+          <a class="page-twenty-four__contact-link page-twenty-four__contact-link--email" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=haikal.prmmna@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Haikal Prammana"></a>
+          <a class="page-twenty-four__contact-link page-twenty-four__contact-link--instagram" href="https://instagram.com/haikallpramana" target="_blank" rel="noopener noreferrer" aria-label="Instagram Haikal Pramana"></a>
+          <a class="page-twenty-four__contact-link page-twenty-four__contact-link--whatsapp" href="https://wa.me/6281386220359" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Haikal Pramana"></a>
         </div>
       </section>
     </main>
