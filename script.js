@@ -176,6 +176,10 @@ function initialiseHeroAboutScroll() {
     link.addEventListener('click', (event) => scrollToDesktopScene(event, '.page-eight-nine-scene'));
   });
 
+  document.querySelectorAll('a[href="#campaign"]').forEach((link) => {
+    link.addEventListener('click', (event) => scrollToDesktopScene(event, '.page-fourteen-fifteen-scene'));
+  });
+
   let frameRequested = false;
 
   function updateTransition() {
